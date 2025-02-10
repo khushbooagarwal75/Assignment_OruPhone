@@ -10,43 +10,47 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {
-
-              },
-              icon: Icon(Icons.menu)),
-          Image.asset("assets/images/logo.png",width: 50,height: 20,),
+          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          Image.asset(
+            "assets/images/logo.png",
+            width: 50,
+            height: 20,
+          ),
           Spacer(),
           Text("India "),
-          IconButton(
-              onPressed: () {
-
-              },
-              icon: Icon(Icons.location_on_outlined)),
-         SizedBox(width: 10,),
+          IconButton(onPressed: () {}, icon: Icon(Icons.location_on_outlined)),
+          SizedBox(
+            width: 10,
+          ),
           TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.amber,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Rounded corners
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.amber,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                ),
               ),
-            ),
-              onPressed: () {  },
-            child: Text("Login",style: TextStyle(
-              color: Colors.black,
-            ),)),
-          SizedBox(width: 10,),
+              onPressed: () {},
+              child: Text(
+                "Login",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              )),
+          SizedBox(
+            width: 10,
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               decoration: InputDecoration(
                 hintText: "Search phones with make,model...",
                 hintStyle: TextStyle(color: Colors.grey),
-isDense: true,
+                isDense: true,
                 // Left-side Search Icon
                 prefixIcon: Icon(Icons.search, color: Colors.orange),
 
@@ -60,17 +64,32 @@ isDense: true,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.black), // Darker when focused
+                  borderSide:
+                      BorderSide(color: Colors.black), // Darker when focused
                 ),
               ),
             ),
-            Row(
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+              child: Row(
+                children: [
+                  ChipText(),
+                ],
+              ),
+            ),
+            Image.asset("assets/images/PhoneBanners.png"),
+            SizedBox(height: 30,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ChipText(),
+                Text("What's on your mind?",
+                style: TextStyle(
+                  fontSize: 22
+                ),),
+                SizedBox(height: 20,),
+                
               ],
             ),
-            Image.asset("assets/images/PhoneBanners.png")
-            Text("Home"),
           ],
         ),
       ),
