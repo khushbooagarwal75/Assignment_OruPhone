@@ -35,71 +35,53 @@ class MobileLoggedinMode extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 5,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: ClipRRect(
-                        borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(12)),
-                        child: Image.network(
-                          'https://via.placeholder.com/150', // Replace with actual image URL
-                          height: 150,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "John Doe", // Replace with actual name
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "This is a sample description text.", // Replace with actual text
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-
-
-                  ],
+                child: ListTile(
+                  contentPadding: EdgeInsets.all(10),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners for the image
+                    child: Image.asset(
+                      'assets/images/logo.png', // Replace with actual image URL
+                      height: 60, // Adjust height
+                      width: 60, // Adjust width
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Text(
+                    "John Doe", // Replace with actual name
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "This is a sample description text.", // Replace with actual text
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
                 ),
               ),
             ),
 
-            ////a
-            SizedBox(
-              height: 10,
-            ),
-            LandingPageButton(
-              color: Colors.indigo,
-              buttonText: "Login/SignUp",
-              textColor: Colors.white,
-            ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 30),
+
             LandingPageButton(
               color: Colors.amber.shade600,
               buttonText: "Sell Your Phone",
               textColor: Colors.black,
             ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Row(
+                children: [
+                  Icon(Icons.logout),
+                  SizedBox( width: 20,),
+                  Text("Logout")
+                ],
+              ),
+            ),
             Spacer(),
             MenuCard(),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
           ],
         ),
       ),
