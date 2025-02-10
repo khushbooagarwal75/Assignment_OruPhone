@@ -87,7 +87,68 @@ class HomeScreen extends StatelessWidget {
                   fontSize: 22
                 ),),
                 SizedBox(height: 20,),
-                
+
+              ],
+            ),
+            SizedBox(height: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text("Top brands",
+                      style: TextStyle(
+                          fontSize: 22
+                      ),),
+                    Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          
+                        }, icon: Icon(Icons.arrow_forward_ios))
+                  ],
+                ),
+                SizedBox(height: 20,),
+
+              ],
+            ),
+            SizedBox(height: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black),
+                    children: [
+                      TextSpan(text: 'Best deals ',
+                        style: TextStyle(
+                          fontSize: 22,
+                        ),),
+                      TextSpan(
+                        text: 'in India',
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 22,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Row(
+                  children: [
+                    Chip(
+
+                      label: Text(
+                        "Sort",
+                        style: TextStyle(color: Colors.black), // Customize text color
+                      ),
+                      // Light grey background
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4), // Padding
+                    ),
+                  ],
+                ),
+
               ],
             ),
           ],
