@@ -5,6 +5,7 @@ import 'package:flutter_assignment_oruphones/components/chip_text.dart';
 import 'package:flutter_assignment_oruphones/components/login_bottomsheet.dart';
 import 'package:flutter_assignment_oruphones/components/product_card.dart';
 import 'package:flutter_assignment_oruphones/components/verify_otp_bottmSheet.dart';
+import 'package:flutter_assignment_oruphones/sortComponents/sort_bottomSheet.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -34,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-               showSignUpBottomSheet(context);
+               showSortBottomSheet(context);
               },
               child: Text(
                 "Login",
