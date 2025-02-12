@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String buttonText;
   final bool showIcon;
-  const CustomButton({super.key, required this.buttonText, required this.showIcon});
+  final VoidCallback? onTap;
+  const CustomButton({super.key, required this.buttonText, required this.showIcon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CustomButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
-        onPressed: () {},
+        onPressed: onTap,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

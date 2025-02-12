@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "782840852",
+    "project_id": "oruphones-assignment-bb30f",
+    "storage_bucket": "oruphones-assignment-bb30f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782840852:android:bbc562007e4e0cc324e301",
+        "android_client_info": {
+          "package_name": "com.example.flutter_assignment_oruphones"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaWqsxa6ujbHH3Tk1YEQvx4BjpYCi-KYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
