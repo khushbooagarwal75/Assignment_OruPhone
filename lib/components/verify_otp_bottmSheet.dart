@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_assignment_oruphones/components/custom_button.dart';
-import 'package:flutter_assignment_oruphones/components/page_title.dart';
 
 void showVerifyOtpBottomSheet(BuildContext context) {
   showModalBottomSheet(

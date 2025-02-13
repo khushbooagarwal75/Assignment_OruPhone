@@ -1,66 +1,27 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_assignment_oruphones/components/custom_button.dart';
-import 'package:flutter_assignment_oruphones/components/page_title.dart';
+import 'package:flutter_assignment_oruphones/provider/otp_provider.dart';
+import 'package:provider/provider.dart';
+import '../components/custom_button.dart';
+import '../components/page_title.dart';
 
-class VerifyOtp extends StatefulWidget {
-  final String verificationId; // Required parameter
+class VerifyOtp extends StatelessWidget {
   final String phone;
-
-  const VerifyOtp({super.key, required this.verificationId, required this.phone});
-
-  @override
-  _VerifyOtpState createState() => _VerifyOtpState();
-}
-
-class _VerifyOtpState extends State<VerifyOtp> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final List<TextEditingController> otpControllers =
-  List.generate(4, (index) => TextEditingController());
-  final List<FocusNode> otpFocusNodes = List.generate(4, (index) => FocusNode());
-  bool isLoading = false;
-
-  void verifyOtp() async {
-    String otp = otpControllers.map((controller) => controller.text).join();
-
-    if (otp.length != 6) {  // Firebase OTP is 6 digits
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please enter a valid 6-digit OTP")));
-      return;
-    }
-
-    setState(() => isLoading = true);
-
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: widget.verificationId, // Using verificationId here
-        smsCode: otp,
-      );
-
-      await _auth.signInWithCredential(credential);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("OTP Verified Successfully!")));
-
-      // Navigate to the next screen after successful verification
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("OTP verification failed: ${e.message}")));
-    }
-
-    setState(() => isLoading = false);
-  }
+  final String verificationId;
+  const VerifyOtp({super.key, required this.phone, required this.verificationId});
 
   @override
   Widget build(BuildContext context) {
+    final otpProvider = Provider.of<OtpProvider>(context);
+    final List<TextEditingController> otpControllers =
+    List.generate(6, (index) => TextEditingController());
+    final List<FocusNode> otpFocusNodes = List.generate(6, (index) => FocusNode());
+
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(CupertinoIcons.xmark),
           ),
         ],
@@ -75,7 +36,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
 
             PageTitle(
               pageTitle: 'Verify Mobile No.',
-              pageSubTitle: "Please enter the 6-digit verification code sent to ${widget.phone} via SMS",
+              pageSubTitle: "Please enter the 6-digit verification code sent to $phone via SMS",
             ),
 
             const SizedBox(height: 100),
@@ -109,39 +70,13 @@ class _VerifyOtpState extends State<VerifyOtp> {
 
             const SizedBox(height: 80),
 
-            // "Didn't receive OTP?" Text
-            const Center(
-              child: Text(
-                "Didn't receive OTP?",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Resend OTP Timer
-            const Center(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Resend OTP ',
-                      style: TextStyle(fontSize: 17, decoration: TextDecoration.underline),
-                    ),
-                    TextSpan(text: 'in ', style: TextStyle(fontSize: 17)),
-                    TextSpan(text: 'Sec', style: TextStyle(fontSize: 17)),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 100),
-
-            // Verify OTP Button
             CustomButton(
-              buttonText: isLoading ? "Verifying..." : "Verify OTP",
+              buttonText: otpProvider.isLoading ? "Verifying..." : "Verify OTP",
               showIcon: false,
-              onTap: verifyOtp,
+              onTap: () {
+                String otp = otpControllers.map((controller) => controller.text).join();
+                otpProvider.verifyOtp(otp, context);
+              },
             ),
           ],
         ),

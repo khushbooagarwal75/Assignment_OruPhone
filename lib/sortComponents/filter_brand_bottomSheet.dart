@@ -1,124 +1,127 @@
 import 'package:flutter/material.dart';
 
-void showFiltersBottomSheet(BuildContext context) {
+void showFilterBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
+    shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Top Bar with Title and Close Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Filters",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.black),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+      return FilterBottomSheet();
+    },
+  );
+}
+
+class FilterBottomSheet extends StatefulWidget {
+  @override
+  _FilterBottomSheetState createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  String selectedCategory = "Brand"; // Default selected category
+
+  final Map<String, List<String>> filterOptions = {
+    "Brand": ["Apple", "Samsung", "Google", "OnePlus", "Xiaomi"],
+    "Condition": ["New", "Used"],
+    "Storage": ["64GB", "128GB", "256GB", "512GB"],
+    "RAM": ["4GB", "6GB", "8GB", "12GB"],
+    "Warranty": ["Under Warranty", "No Warranty"],
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Row(
+        children: [
+          // Left-side menu
+          Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(16)),
             ),
-            const Divider(),
-
-            // Searchable Brand List
-            _buildSearchableFilterSection("Brand", ["All Brands", "Apple", "Samsung", "Google", "OnePlus", "Xiaomi"]),
-            _buildFilterSection("Condition", 2),
-            _buildFilterSection("Storage", 2),
-            _buildFilterSection("RAM", 2),
-            _buildFilterSection("Verification", 2),
-            _buildFilterSection("Warranty", 2),
-            _buildFilterSection("Price Range", 2),
-
-            const SizedBox(height: 16),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      // Clear filters logic
-                    },
-                    child: const Text("Clear All", style: TextStyle(color: Colors.black)),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      foregroundColor: Colors.black,
+            child: ListView(
+              children: filterOptions.keys.map((category) {
+                return ListTile(
+                  title: Text(
+                    category,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: selectedCategory == category ? Colors.orange : Colors.black,
                     ),
-                    onPressed: () {
-                      // Apply filters logic
-                    },
-                    child: const Text("Apply"),
                   ),
-                ),
-              ],
+                  tileColor: selectedCategory == category ? Colors.orange.shade100 : Colors.transparent,
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                );
+              }).toList(),
             ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-// Searchable Brand Section
-Widget _buildSearchableFilterSection(String title, List<String> options) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      const SizedBox(height: 8),
-      TextField(
-        decoration: InputDecoration(
-          hintText: "Search here",
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-        ),
+          ),
+          // Right-side content
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    selectedCategory,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      children: filterOptions[selectedCategory]!.map((option) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: false,
+                              onChanged: (value) {},
+                            ),
+                            title: Text(option),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        child: Text(
+                          "Apply Filters",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      const SizedBox(height: 10),
-      Wrap(
-        spacing: 8,
-        children: options.map((brand) {
-          return ChoiceChip(
-            label: Text(brand),
-            selected: false, // Replace with state management
-            selectedColor: Colors.amber,
-            backgroundColor: Colors.grey.shade200,
-            onSelected: (selected) {
-              // Handle selection logic
-            },
-          );
-        }).toList(),
-      ),
-      const SizedBox(height: 10),
-    ],
-  );
-}
-
-// Helper function for filter row
-Widget _buildFilterSection(String title, int count) {
-  return ListTile(
-    title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-    trailing: CircleAvatar(
-      backgroundColor: Colors.amber,
-      radius: 12,
-      child: Text("$count", style: const TextStyle(color: Colors.black, fontSize: 12)),
-    ),
-    onTap: () {
-      // Open respective filter screen
-    },
-  );
+    );
+  }
 }

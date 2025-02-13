@@ -3,8 +3,8 @@ class LandingPageButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final String buttonText;
-  const LandingPageButton({super.key, required this.color, required this.buttonText, required this.textColor});
-
+  void Function() onPressed;
+  LandingPageButton({super.key, required this.color, required this.buttonText, required this.textColor,required this.onPressed});
   @override
   Widget build(BuildContext context) {
     return Padding(

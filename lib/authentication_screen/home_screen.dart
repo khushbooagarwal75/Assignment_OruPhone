@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assignment_oruphones/components/account_notFound_bottomSheet.dart';
 import 'package:flutter_assignment_oruphones/components/chip_text.dart';
-import 'package:flutter_assignment_oruphones/components/login_bottomsheet.dart';
 import 'package:flutter_assignment_oruphones/components/product_card.dart';
-import 'package:flutter_assignment_oruphones/components/verify_otp_bottmSheet.dart';
+import 'package:flutter_assignment_oruphones/landing_pages/mobile_guest_mode.dart';
+import 'package:flutter_assignment_oruphones/sortComponents/filter_brand_bottomSheet.dart';
 import 'package:flutter_assignment_oruphones/sortComponents/sort_bottomSheet.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -35,7 +33,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-               showSortBottomSheet(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return MobileGuestMode();
+                },));
               },
               child: Text(
                 "Login",
@@ -147,40 +147,50 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Sort Button
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent, // White background
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300), // Light grey border
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.import_export, color: Colors.black), // Leading icon
-                            SizedBox(width: 6),
-                            Text("Sort", style: TextStyle(color: Colors.black, fontSize: 16)),
-                            SizedBox(width: 6),
-                            Icon(Icons.keyboard_arrow_down, color: Colors.grey), // Trailing icon
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          showSortBottomSheet(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent, // White background
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300), // Light grey border
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.import_export, color: Colors.black), // Leading icon
+                              SizedBox(width: 6),
+                              Text("Sort", style: TextStyle(color: Colors.black, fontSize: 16)),
+                              SizedBox(width: 6),
+                              Icon(Icons.keyboard_arrow_down, color: Colors.grey), // Trailing icon
+                            ],
+                          ),
                         ),
                       ),
 
                       // Filter Button
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent, // White background
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300), // Light grey border
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.filter_list, color: Colors.black), // Leading icon
-                            SizedBox(width: 6),
-                            Text("Filter", style: TextStyle(color: Colors.black, fontSize: 16)),
-                            SizedBox(width: 6),
-                            Icon(Icons.keyboard_arrow_down, color: Colors.grey), // Trailing icon
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          showFilterBottomSheet(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent, // White background
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300), // Light grey border
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.filter_list, color: Colors.black), // Leading icon
+                              SizedBox(width: 6),
+                              Text("Filter", style: TextStyle(color: Colors.black, fontSize: 16)),
+                              SizedBox(width: 6),
+                              Icon(Icons.keyboard_arrow_down, color: Colors.grey), // Trailing icon
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -204,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                         description: '12/256 GB .Like New',
                         details: 'RS 415000',
                         location: 'Nagpur',
-                        date: 'Feb 11,2025',
+                        date: 'Feb 11,25',
                       );
                     },
                   ),

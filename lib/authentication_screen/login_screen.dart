@@ -1,124 +1,101 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assignment_oruphones/components/custom_button.dart';
-import 'package:flutter_assignment_oruphones/components/page_title.dart';
-import 'verify_otp.dart';
+import 'package:flutter_assignment_oruphones/provider/otp_provider.dart';
+import 'package:provider/provider.dart';
+import '../components/custom_button.dart';
+import '../components/page_title.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController phoneController = TextEditingController(text: "+91 ");
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  bool isLoading = false;
-  String verificationId = "";
-
-  void sendOTP() async {
-    String phone = phoneController.text.trim();
-
-    if (phone.length < 13) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Enter a valid phone number"))
-      );
-      return;
-    }
-
-    setState(() => isLoading = true);
-
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phone,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Verification failed: ${e.message}"))
-        );
-        setState(() => isLoading = false);
-      },
-      codeSent: (String verId, int? resendToken) {
-        verificationId = verId;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VerifyOtp(verificationId: verificationId, phone: phone),
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verId) {
-        verificationId = verId;
-      },
-      timeout: const Duration(seconds: 60),
-    );
-
-    setState(() => isLoading = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final otpProvider = Provider.of<OtpProvider>(context);
+
     return Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(CupertinoIcons.xmark),
-        ),
-      ]),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(child: Image.asset("assets/images/logo.png")),
-            const SizedBox(height: 50),
-            PageTitle(pageTitle: 'Welcome', pageSubTitle: 'Sign in to continue'),
-            const SizedBox(height: 100),
-
-            const Text("Enter Your Phone Number", style: TextStyle(fontSize: 13)),
-            const SizedBox(height: 5),
-            TextField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                hintText: "Mobile Number",
-                border: OutlineInputBorder(),
+      resizeToAvoidBottomInset: true, // Prevents keyboard overflow
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.xmark),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(), // Hide keyboard when tapping outside
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height, // Ensure it fills screen
               ),
-            ),
-            const SizedBox(height: 80),
+              child: IntrinsicHeight( // Adjusts height dynamically
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(child: Image.asset("assets/images/logo.png", height: 120)),
+                    const SizedBox(height: 30),
 
-            Row(
-              children: [
-                Checkbox(value: true, onChanged: (value) {}),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(text: 'Accept '),
-                      TextSpan(
-                        text: 'Terms and Conditions',
-                        style: TextStyle(
-                          color: Colors.indigo,
-                          decoration: TextDecoration.underline,
+                    const PageTitle(pageTitle: 'Welcome', pageSubTitle: 'Sign in to continue'),
+                    const SizedBox(height: 30),
+
+                    const Text("Enter Your Phone Number", style: TextStyle(fontSize: 13)),
+                    const SizedBox(height: 5),
+                    TextField(
+                      controller: otpProvider.phoneController,
+                      focusNode: otpProvider.phoneFocusNode,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        hintText: "Mobile Number",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+
+                    Row(
+                      children: [
+                        Checkbox(value: true, onChanged: (value) {}),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: RichText(
+                              text: const TextSpan(
+                                style: TextStyle(color: Colors.black),
+                                children: [
+                                  TextSpan(text: 'Accept '),
+                                  TextSpan(
+                                    text: 'Terms and Conditions',
+                                    style: TextStyle(
+                                      color: Colors.indigo,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    Expanded( // Allows button to adjust within available space
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: CustomButton(
+                          buttonText: otpProvider.isLoading ? "Sending..." : "Next",
+                          showIcon: true,
+                          onTap: () => otpProvider.sendOTP(context),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-              ],
+              ),
             ),
-            const SizedBox(height: 20),
-
-            CustomButton(
-              buttonText: isLoading ? "Sending..." : "Next",
-              showIcon: true,
-              onTap: sendOTP,
-            ),
-          ],
+          ),
         ),
       ),
     );
